@@ -512,6 +512,13 @@ class DCGAN(object):
     self.saver.save(self.sess,
             os.path.join(checkpoint_dir, model_name),
             global_step=step)
+    
+    tf.train.write_graph(
+      tf.graph_util.convert_variables_to_constants(self.sess, self.sess.graph_def, ["generator_1/Tanh"]),
+      checkpoint_dir,
+      '{}-{:06d}_frz.pb'.format("DCGAN", step),
+      as_text=False
+      )
 
   def load(self, checkpoint_dir):
     import re
